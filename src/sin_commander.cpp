@@ -2,14 +2,12 @@
 #include <ros/ros.h> 
 #include <std_msgs/Float64.h> 
 #include <string>
-
 //Project specific include:
 #include <math.h>
 #include <iostream>
-
 //Service specific
 #include <cxq41_ps2/SinComponent.h>
-
+//Global Variable Initiation
 std_msgs::Float64 commander_amplitude; //Global variable for storing amplitude
 std_msgs::Float64 commander_frequency; //Global variable for storing frequency
 std_msgs::Float64 sin_output; //Global Variable for the sinusoidal output
@@ -17,31 +15,33 @@ const double PI  =3.141592653589793238463; //Yep too fucking lazy to figure out 
 
 //Service callback
 bool callback(cxq41_ps2::SinComponentRequest& request, cxq41_ps2::SinComponentResponse& response) {
+    //Get amplitude
     commander_amplitude.data = request.amplitude;
     ROS_INFO("Obtained amplitude is: %f", commander_amplitude.data);
-
+    //Get frequency
     commander_frequency.data = request.frequency;
     ROS_INFO("Obtained frequency is: %f", commander_frequency.data);
-
     response.obtained = true;
+    ROS_INFO("Obtain success!");
 }
 
 
 int main(int argc, char **argv) {
-
+    //Node Initiation
     ros::init(argc, argv, "sin_commander"); //name this node 
 
-    ros::NodeHandle nh; // node handle
+    //node handler
+    ros::NodeHandle nh_commander; // node handle
 
-    ros::ServiceServer service = nh.advertiseService("SinComponentExchange",callback);
+    //Announce the service
+    ros::ServiceServer service = nh_commander.advertiseService("SinComponentExchange",callback); //Get info from service
 
     //Announcer for topic
-    ros::Publisher sinWave_outputter = nh.advertise<std_msgs::Float64>("vel_cmd", 1);
-
-    
+    ros::Publisher sinWave_outputter = nh_commander.advertise<std_msgs::Float64>("vel_cmd", 1);
 
     //Initiate sin_output
     sin_output.data = 0.00;
+
     //Initiate Time for sine generation:
     double current_time; // Initate the time
     current_time = 0.00; //Resets time to 0

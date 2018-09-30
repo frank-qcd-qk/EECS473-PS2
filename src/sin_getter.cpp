@@ -10,13 +10,16 @@
 #include <cxq41_ps2/SinComponent.h>
 
 int main(int argc, char **argv) {
-   //client initiation
+   //Node Initiation
     ros::init(argc, argv, "sin_getter");
+    
     //node handler
     ros::NodeHandle getter_nh;
     
-    ros::ServiceClient client = getter_nh.serviceClient<cxq41_ps2::SinComponent>("SinComponentExchange");
+    //Announce the service
+    ros::ServiceClient client = getter_nh.serviceClient<cxq41_ps2::SinComponent>("SinComponentExchange"); //publish info to service
 
+    //Message type specification
     cxq41_ps2::SinComponent srv;
 
     while (ros::ok()) {
@@ -33,7 +36,6 @@ int main(int argc, char **argv) {
             std::cin >> srv.request.amplitude;
         }
         ROS_INFO("The amplitude you set is: %f", srv.request.amplitude);
-
         //Get input for frequency:
         srv.request.frequency = 0.00;
         std::cout << std::endl;

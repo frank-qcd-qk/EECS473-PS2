@@ -22,7 +22,6 @@ bool callback(cxq41_ps2::SinComponentRequest& request, cxq41_ps2::SinComponentRe
     commander_frequency.data = request.frequency;
     ROS_INFO("Obtained frequency is: %f", commander_frequency.data);
     response.obtained = true;
-    ROS_INFO("Obtain success!");
 }
 
 

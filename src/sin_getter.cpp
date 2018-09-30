@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
         ROS_INFO("The frequency you set is: %f", srv.request.frequency);
 
         //Confirmation of get
-        if(client.call(srv)){
+        if(client.call(srv)&&srv.response.obtained){
             ROS_INFO("Both input obtained! Handover to commander.......");
         } else {
             ROS_ERROR("Failed to call service SinComponentExchange");

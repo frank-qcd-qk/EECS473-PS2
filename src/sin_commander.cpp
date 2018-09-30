@@ -8,24 +8,22 @@
 #include <iostream>
 
 //Service specific
-#include <cxq41_p2/SinComponent.h>
+#include <cxq41_ps2/SinComponent.h>
 
-std_msgs::float64 commander_amplitude; //Global variable for storing amplitude
-std_msgs::float64 commander_frequency; //Global variable for storing frequency
-std_msgs::float64 sin_output; //Global Variable for the sinusoidal output
+std_msgs::Float64 commander_amplitude; //Global variable for storing amplitude
+std_msgs::Float64 commander_frequency; //Global variable for storing frequency
+std_msgs::Float64 sin_output; //Global Variable for the sinusoidal output
 const double PI  =3.141592653589793238463; //Yep too fucking lazy to figure out proper way to express pi!
 
 //Service callback
-bool callback(cxq41_p2::SinComponentRequest& request, cxq41_p2::SinComponentResponse& response) {
-    // place received data in appropriate global variables
+bool callback(cxq41_ps2::SinComponentRequest& request, cxq41_ps2::SinComponentResponse& response) {
     commander_amplitude.data = request.amplitude;
-    ROS_INFO("Obtained amplitude is: %f", commander_amplitude.amplitude);
+    ROS_INFO("Obtained amplitude is: %f", commander_amplitude.data);
 
     commander_frequency.data = request.frequency;
-    ROS_INFO("Obtained frequency is: %f", commander_frequency.frequency);
+    ROS_INFO("Obtained frequency is: %f", commander_frequency.data);
 
-    // let user know that the service was carried out
-    response.completed = true;
+    response.obtained = true;
 }
 
 
@@ -35,7 +33,7 @@ int main(int argc, char **argv) {
 
     ros::NodeHandle nh; // node handle
 
-    ros::ServiceServer service = nh.advertiseService("SinComponentExchange",callback)
+    ros::ServiceServer service = nh.advertiseService("SinComponentExchange",callback);
 
     //Announcer for topic
     ros::Publisher sinWave_outputter = nh.advertise<std_msgs::Float64>("vel_cmd", 1);
@@ -56,7 +54,7 @@ int main(int argc, char **argv) {
 
     while (ros::ok()) {
         //sin wave is generated below:
-        sin_output.data = amplitude.data * sin(2.00 * frequency.data * PI * current_time);
+        sin_output.data = commander_amplitude.data * sin(2.00 * commander_frequency.data * PI * current_time);
         current_time = current_time + dt; //time is ticking!
         sinWave_outputter.publish(sin_output);
         ROS_INFO("Current sin_ouput is: %f", sin_output.data); //Debug info spit!

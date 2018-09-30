@@ -31,9 +31,10 @@ catkin_simple()
 
 # Executables: uncomment the following and edit arguments to compile new nodes
 # may add more of these lines for more nodes from the same package
- cs_add_executable(cxq41_ps2 src/minimal_controller.cpp)
- cs_add_executable(cxq41_ps2 src/minimal_simulator.cpp)
- cs_add_executable(cxq41_ps2 src/sin_commander.cpp)
+ cs_add_executable(ps2_minimal_controller src/minimal_controller.cpp)
+ cs_add_executable(ps2_minimal_simulator src/minimal_simulator.cpp)
+ cs_add_executable(ps2_sin_commander src/sin_commander.cpp)
+ cs_add_executable(ps2_sin_getter src/sin_getter.cpp)
 
 
 #the following is required, if desire to link a node in this package with a library created in this same package
